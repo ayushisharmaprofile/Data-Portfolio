@@ -1,0 +1,197 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMm8VAdKMA1lxwzlfEvP57F",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ayushisharmaprofile/Data-Portfolio/blob/main/SQL%20/Analyze%20Online%20Rental%20Movies\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "collapsed": true,
+        "id": "wC-uiCVbUd63",
+        "outputId": "5dd681ff-e869-4e7d-bc76-3501d8fb2efa"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: ipython-sql in /usr/local/lib/python3.12/dist-packages (0.5.0)\n",
+            "Requirement already satisfied: prettytable in /usr/local/lib/python3.12/dist-packages (from ipython-sql) (3.16.0)\n",
+            "Requirement already satisfied: ipython in /usr/local/lib/python3.12/dist-packages (from ipython-sql) (7.34.0)\n",
+            "Requirement already satisfied: sqlalchemy>=2.0 in /usr/local/lib/python3.12/dist-packages (from ipython-sql) (2.0.44)\n",
+            "Requirement already satisfied: sqlparse in /usr/local/lib/python3.12/dist-packages (from ipython-sql) (0.5.3)\n",
+            "Requirement already satisfied: six in /usr/local/lib/python3.12/dist-packages (from ipython-sql) (1.17.0)\n",
+            "Requirement already satisfied: ipython-genutils in /usr/local/lib/python3.12/dist-packages (from ipython-sql) (0.2.0)\n",
+            "Requirement already satisfied: greenlet>=1 in /usr/local/lib/python3.12/dist-packages (from sqlalchemy>=2.0->ipython-sql) (3.2.4)\n",
+            "Requirement already satisfied: typing-extensions>=4.6.0 in /usr/local/lib/python3.12/dist-packages (from sqlalchemy>=2.0->ipython-sql) (4.15.0)\n",
+            "Requirement already satisfied: setuptools>=18.5 in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (75.2.0)\n",
+            "Collecting jedi>=0.16 (from ipython->ipython-sql)\n",
+            "  Downloading jedi-0.19.2-py2.py3-none-any.whl.metadata (22 kB)\n",
+            "Requirement already satisfied: decorator in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (4.4.2)\n",
+            "Requirement already satisfied: pickleshare in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (0.7.5)\n",
+            "Requirement already satisfied: traitlets>=4.2 in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (5.7.1)\n",
+            "Requirement already satisfied: prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0 in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (3.0.52)\n",
+            "Requirement already satisfied: pygments in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (2.19.2)\n",
+            "Requirement already satisfied: backcall in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (0.2.0)\n",
+            "Requirement already satisfied: matplotlib-inline in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (0.1.7)\n",
+            "Requirement already satisfied: pexpect>4.3 in /usr/local/lib/python3.12/dist-packages (from ipython->ipython-sql) (4.9.0)\n",
+            "Requirement already satisfied: wcwidth in /usr/local/lib/python3.12/dist-packages (from prettytable->ipython-sql) (0.2.14)\n",
+            "Requirement already satisfied: parso<0.9.0,>=0.8.4 in /usr/local/lib/python3.12/dist-packages (from jedi>=0.16->ipython->ipython-sql) (0.8.5)\n",
+            "Requirement already satisfied: ptyprocess>=0.5 in /usr/local/lib/python3.12/dist-packages (from pexpect>4.3->ipython->ipython-sql) (0.7.0)\n",
+            "Downloading jedi-0.19.2-py2.py3-none-any.whl (1.6 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.6/1.6 MB\u001b[0m \u001b[31m18.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: jedi\n",
+            "Successfully installed jedi-0.19.2\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install ipython-sql"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "import sqlite3"
+      ],
+      "metadata": {
+        "id": "C9UheWP6Uqya"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%load_ext sql"
+      ],
+      "metadata": {
+        "id": "u_wj22QCUvft"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%sql sqlite:///MovieNow.db"
+      ],
+      "metadata": {
+        "id": "5cIVsLY9U6ZH"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Create blank tables inside SQLite database\n",
+        "%sql --file./MovieNow-sqlite.sql"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "yIxDLHyNVAmg",
+        "outputId": "557cfec1-8fda-4d6e-cd85-563427270030"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            " * sqlite:///MovieNow.db\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "042bec65",
+        "outputId": "58f3192c-c95a-45d6-f82e-e276d4619553"
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(\"/content/drive\", force_remount=True).\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "350e97be"
+      },
+      "source": [
+        "# Load Actors CSV file into a DataFrame\n",
+        "actors = '/content/drive/My Drive/Projects/Online movie Rental/actors.csv'\n",
+        "actsin = '/content/drive/My Drive/Projects/Online movie Rental/actsin.csv'\n",
+        "customers = '/content/drive/My Drive/Projects/Online movie Rental/customers.csv'\n",
+        "movies = '/content/drive/My Drive/Projects/Online movie Rental/movies.csv'\n",
+        "renting = '/content/drive/My Drive/Projects/Online movie Rental/renting.csv'\n",
+        "\n",
+        "df_at = pd.read_csv(actors)\n",
+        "df_as = pd.read_csv(actsin)\n",
+        "df_c = pd.read_csv(customers)\n",
+        "df_m = pd.read_csv(movies)\n",
+        "df_r = pd.read_csv(renting)\n",
+        "\n",
+        "# Connect to SQLite database\n",
+        "conn = sqlite3.connect('MovieNow.db')\n",
+        "\n",
+        "# Write DataFrame to SQLite table\n",
+        "df_at.to_sql('actors', conn, index=False, if_exists='replace')\n",
+        "df_as.to_sql('actsin', conn, index=False, if_exists='replace')\n",
+        "df_c.to_sql('customers', conn, index=False, if_exists='replace')\n",
+        "df_m.to_sql('movies', conn, index=False, if_exists='replace')\n",
+        "df_r.to_sql('renting', conn, index=False, if_exists='replace')\n",
+        "\n",
+        "# Close the connection\n",
+        "conn.close()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
